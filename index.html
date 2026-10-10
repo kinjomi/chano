@@ -42,6 +42,7 @@
     }
 
     * { box-sizing: border-box; margin: 0; }
+    html { scroll-behavior: smooth; }
 
     body {
       font-family: Manrope, "Noto Sans KR", system-ui, sans-serif;
@@ -116,6 +117,7 @@
     /* 움직임 줄이기 설정을 켠 사용자에겐 애니메이션 정지 */
     @media (prefers-reduced-motion: reduce) {
       .word span, .row div { animation: none; }
+      html { scroll-behavior: auto; }
     }
 
     /* ===== 소개 + 링크 ===== */
@@ -198,21 +200,263 @@
     .card dt { opacity: .7; white-space: nowrap; }
     .card dd { font-weight: 700; text-align: right; word-break: keep-all; }
 
-    .btn {
-      display: inline-block;
-      margin-top: 24px;
-      background: var(--ink);
-      color: var(--cream);
-      padding: 14px 26px;
+    /* ===== 바로가기 메뉴 (소개 문구 아래) ===== */
+    .jump { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; }
+    .jump a {
+      color: var(--ink);
       text-decoration: none;
       font-weight: 700;
-      border: 3px solid var(--ink);
+      font-size: .9rem;
+      border: 2px solid rgba(255, 255, 255, .5);
+      padding: 6px 12px;
     }
-    .btn:hover { background: var(--red); border-color: var(--red); color: #fff; }
+    .jump a:hover { border-color: var(--red); background: var(--red); }
+
+    /* ===== 아래 섹션 공통 ===== */
+    .sec {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 70px 24px 10px;
+    }
+    .sec h2 {
+      font-family: "Black Han Sans", sans-serif;
+      font-weight: 400;
+      font-size: clamp(2rem, 5vw, 3rem);
+      line-height: 1.1;
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      margin-bottom: 28px;
+      padding-bottom: 12px;
+      border-bottom: 3px solid var(--red);
+    }
+    .sec h2 small {
+      font-family: "Big Shoulders Display", sans-serif;
+      font-size: .5em;
+      letter-spacing: .1em;
+      color: var(--red);
+    }
+    .note { opacity: .7; font-size: .9rem; margin-top: 14px; word-break: keep-all; }
+
+    /* 프로필 카드와 같은 상자 */
+    .box {
+      background: var(--bg);
+      border: 3px solid #fff;
+      box-shadow: 8px 8px 0 var(--red);
+      padding: 20px 22px;
+    }
+    .grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+
+    /* ===== 기록 ===== */
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 0; }
+    .stat { text-align: center; padding: 10px 6px; border-right: 1px solid rgba(255,255,255,.2); }
+    .stat:last-child { border: 0; }
+    .stat b {
+      display: block;
+      font-family: "Big Shoulders Display", sans-serif;
+      font-size: 2.8rem;
+      line-height: 1;
+    }
+    .stat span { opacity: .7; font-size: .85rem; }
+    .box-label { opacity: .7; font-size: .85rem; margin-bottom: 10px; }
+
+    /* 공식 홈페이지 임베드 (높이는 여기서 조절) */
+    .embed { padding: 0; margin-top: 28px; height: 760px; background: #fff; }
+    .embed iframe { width: 100%; height: 100%; border: 0; display: block; }
+    @media (max-width: 600px) { .embed { height: 620px; } }
+
+    /* 큰 링크 버튼 (기록 / 갤러리 / 베어스TV) */
+    .links { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin-top: 28px; }
+    .link-btn {
+      display: block;
+      text-decoration: none;
+      color: var(--cream);
+      background: var(--ink);
+      border: 3px solid var(--ink);
+      padding: 18px 22px;
+      transition: transform .15s;
+    }
+    .link-btn small { display: block; font-size: .8rem; opacity: .7; }
+    .link-btn strong { font-family: "Do Hyeon", sans-serif; font-weight: 400; font-size: 1.6rem; }
+    .link-btn:hover { background: var(--red); border-color: var(--red); color: #fff; transform: translate(-3px, -3px); }
+
+    /* ===== 타임라인 ===== */
+    .timeline { list-style: none; padding: 0; border-left: 3px solid #fff; margin-left: 8px; }
+    .timeline li { position: relative; padding: 0 0 28px 28px; word-break: keep-all; }
+    .timeline li::before {
+      content: "";
+      position: absolute;
+      left: -11px; top: 8px;
+      width: 16px; height: 16px;
+      background: var(--red);
+      border: 3px solid #fff;
+    }
+    .timeline .year {
+      font-family: "Big Shoulders Display", sans-serif;
+      font-size: 1.8rem;
+      line-height: 1.1;
+      color: #fff;
+      -webkit-text-stroke: .04em var(--red);
+      paint-order: stroke fill;
+    }
+
+    /* ===== 수상 ===== */
+    .award strong { display: block; font-family: "Do Hyeon", sans-serif; font-weight: 400; font-size: 1.5rem; margin-top: 6px; }
+    .award span { opacity: .8; }
+    .award .icon { font-size: 2rem; }
+
+    /* ===== 영상 칸 ===== */
+    .videos { display: grid; gap: 24px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+    .video { padding: 0; }
+    .video .frame {
+      aspect-ratio: 16 / 9;
+      display: flex; align-items: center; justify-content: center;
+      background: repeating-linear-gradient(45deg, rgba(255,255,255,.04) 0 12px, transparent 12px 24px);
+      border-bottom: 3px solid #fff;
+      opacity: .9;
+    }
+    .video iframe { width: 100%; height: 100%; border: 0; display: block; }
+    .video p { padding: 12px 18px; font-weight: 700; }
+
+    /* ===== 찬호에게 보내는 환호들: 잠실 관중석 ===== */
+    .stadium-caption {
+      font-family: "Do Hyeon", sans-serif;
+      font-size: 1.3rem;
+      margin: -10px 0 18px;
+      word-break: keep-all;
+    }
+    .stadium-caption b { color: var(--red); font-weight: 400; }
+
+    .stadium {
+      position: relative;
+      border: 3px solid #fff;
+      box-shadow: 10px 10px 0 var(--red);
+      overflow: hidden;
+      padding: 56px 16px 0;
+      /* 편지가 많아질수록(--glow 0→1) 경기장이 조금씩 밝아져요 */
+      background:
+        radial-gradient(ellipse at 50% 110%, rgba(255, 214, 140, calc(.08 + var(--glow) * .25)), transparent 65%),
+        linear-gradient(#05050f, #0b0a22 55%, #131230);
+    }
+
+    /* 지붕 조명탑 */
+    .lights { position: absolute; top: 12px; left: 0; right: 0; display: flex; justify-content: space-around; }
+    .lights i {
+      width: 38px; height: 10px;
+      background: repeating-linear-gradient(90deg, #fff7d6 0 5px, transparent 5px 8px);
+      box-shadow: 0 0 18px 4px rgba(255, 240, 190, .35);
+      opacity: .85;
+    }
+
+    /* 관중석: 위로 갈수록 좁아져서 원근감 */
+    .stands { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .stand-row {
+      display: grid;
+      grid-template-columns: repeat(var(--n), 1fr);
+      gap: 4px;
+      width: var(--w);
+      padding-bottom: 4px;
+      border-bottom: 2px solid rgba(255, 255, 255, .08);  /* 계단 단차 */
+    }
+    .seat {
+      aspect-ratio: 1 / 1.1;
+      border-radius: 4px 4px 2px 2px;
+      background: #1f1e45;
+      border: 0;
+      padding: 0;
+    }
+    /* 불 켜진 자리 = 편지 */
+    .seat.lit {
+      cursor: pointer;
+      background: #fff6d8;
+      box-shadow: 0 0 10px 3px rgba(255, 236, 170, .75), 0 0 26px 8px rgba(255, 220, 140, .25);
+      animation: twinkle 3s ease-in-out infinite;
+      animation-delay: var(--d);
+    }
+    .seat.lit:hover, .seat.lit:focus-visible {
+      background: #fff;
+      box-shadow: 0 0 14px 6px rgba(237, 28, 36, .9);
+      outline: none;
+      transform: scale(1.25);
+      animation: none;
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 1; }
+      50%      { opacity: .55; }
+    }
+
+    /* 그라운드 */
+    .field {
+      position: relative;
+      margin: 18px -16px 0;
+      height: 70px;
+      background: linear-gradient(#b5653a 0 14px, #2f7d3a 14px);
+      border-top: 3px solid #fff;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .field span {
+      font-family: "Big Shoulders Display", sans-serif;
+      font-size: 2.6rem;
+      color: rgba(255, 255, 255, .25);
+      margin-top: 14px;
+    }
+
+    /* ===== 편지 창 ===== */
+    .letter {
+      width: min(560px, calc(100% - 32px));
+      max-height: 85vh;
+      margin: auto;   /* 맨 위 * { margin: 0 } 때문에 가운데 정렬을 다시 지정 */
+      border: 3px solid #fff;
+      box-shadow: 10px 10px 0 var(--red);
+      padding: 40px 32px 30px;
+      background: #fbf7ee;
+      color: var(--bg);
+      font-family: "Noto Sans KR", sans-serif;
+      /* 편지지 줄 */
+      background-image: repeating-linear-gradient(transparent 0 31px, rgba(19, 18, 48, .08) 31px 32px);
+    }
+    .letter::backdrop { background: rgba(5, 5, 15, .8); }
+    .letter[open] { animation: unfold .35s ease-out; }
+    @keyframes unfold {
+      from { opacity: 0; transform: translateY(20px) scale(.97); }
+      to   { opacity: 1; transform: none; }
+    }
+    .letter-close {
+      position: absolute; top: 8px; right: 12px;
+      background: none; border: 0;
+      font-size: 2rem; line-height: 1;
+      color: var(--bg); cursor: pointer;
+    }
+    .stamp {
+      position: absolute; top: 18px; right: 50px;
+      width: 46px; height: 54px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: "Big Shoulders Display", sans-serif;
+      font-size: 2rem;
+      color: #fff;
+      background: var(--red);
+      outline: 3px dashed #fbf7ee;
+      outline-offset: -6px;
+      transform: rotate(6deg);
+    }
+    .letter-date { font-size: .85rem; opacity: .6; }
+    .letter-title {
+      font-family: "Black Han Sans", sans-serif;
+      font-weight: 400;
+      font-size: 1.7rem;
+      margin: 4px 70px 18px 0;
+      word-break: keep-all;
+    }
+    .letter-body { line-height: 2; white-space: pre-wrap; word-break: keep-all; }
+    .letter-sign { margin-top: 24px; text-align: right; font-weight: 700; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .seat.lit, .letter[open] { animation: none; }
+    }
 
     footer {
       text-align: center;
-      padding: 0 24px 30px;
+      padding: 80px 24px 30px;
       font-size: .85rem;
     }
     footer a { color: var(--ink); }
@@ -226,6 +470,7 @@
     @media (max-width: 600px) {
       .info { padding: 48px 20px; }
       .k { padding-inline: 48px; }
+      .sec { padding: 56px 20px 10px; }
 
       /* 띠 */
       .row span {
@@ -237,6 +482,8 @@
       /* 프로필 카드 */
       .photo { width: 70px; }
       .num { font-size: 5rem; }
+
+      .stat { border-right: 0; }
     }
   </style>
 </head>
@@ -285,10 +532,18 @@
       </div>
     </div>
 
+    <!-- ===== 0. 소개 + 프로필 ===== -->
     <section class="info" id="links">
       <div>
         <p>찬호를 위한,<br>찬호에 의한,<br>나의 환호가 찬호에게 닿기를.</p>
-        <a class="btn" href="#">환호 보내기 📣</a>
+        <nav class="jump" aria-label="바로가기">
+          <a href="#records">기록</a>
+          <a href="#timeline">타임라인</a>
+          <a href="#awards">수상</a>
+          <a href="#highlights">명장면</a>
+          <a href="#betip">베팁</a>
+          <a href="#cheers">찬호에게 보내는 환호들</a>
+        </nav>
       </div>
       <article class="card" aria-label="선수 프로필">
         <div class="card-top">
@@ -302,17 +557,280 @@
         <dl>
           <div><dt>포지션</dt><dd>유격수 (SS)</dd></div>
           <div><dt>타순</dt><dd>1번 타자 · 리드오프</dd></div>
-          <div><dt>소속</dt><dd>두산 베어스 (2026~)</dd></div>
+          <div><dt>생년월일</dt><dd>1995. 6. 5.</dd></div>
+          <div><dt>출생지</dt><dd>대구 (5살 때 서울로)</dd></div>
+          <div><dt>투타</dt><dd>우투우타</dd></div>
+          <div><dt>신장 / 체중</dt><dd>178cm / 72kg</dd></div>
+          <div><dt>출신 학교</dt><dd>서울신답초(성동구리틀)<br>건대부중 · 장충고</dd></div>
+          <div><dt>입단</dt><dd>2014 KIA 2차 5라운드<br>(전체 50순위)</dd></div>
+          <div><dt>병역</dt><dd>육군 수방사 제1경비단<br>만기 전역 (2017–2018)</dd></div>
+          <div><dt>소속팀</dt><dd>KIA 타이거즈 (2014–2025)<br>두산 베어스 (2026~)</dd></div>
+          <div><dt>계약</dt><dd>4년 최대 80억 원 (2026–2029)</dd></div>
+          <div><dt>등장곡</dt><dd>환호 (김영석 &amp; Young K)</dd></div>
           <div><dt>수상</dt><dd>2024 유격수 골든글러브<br>도루왕 2회 · KBO 수비상 2회</dd></div>
           <div><dt>모토</dt><dd>허슬</dd></div>
         </dl>
       </article>
     </section>
+
+    <!-- ===== 1. 기록 + 공식 홈페이지 링크 ===== -->
+    <section class="sec" id="records">
+      <h2>기록 <small>RECORDS</small></h2>
+      <div class="box">
+        <p class="box-label">KIA 시절 1군 통산 (2014–2025)</p>
+        <div class="stats">
+          <div class="stat"><b>1088</b><span>경기</span></div>
+          <div class="stat"><b>.266</b><span>타율</span></div>
+          <div class="stat"><b>23</b><span>홈런</span></div>
+          <div class="stat"><b>353</b><span>타점</span></div>
+          <div class="stat"><b>514</b><span>득점</span></div>
+          <div class="stat"><b>187</b><span>도루</span></div>
+        </div>
+      </div>
+      <!-- ✏️ 2026 시즌 기록: 각 <b></b> 안에 숫자를 채워주세요 -->
+      <div class="box" style="margin-top:28px">
+        <p class="box-label">2026 시즌 (두산 베어스)</p>
+        <div class="stats">
+          <div class="stat"><b>-</b><span>경기</span></div>
+          <div class="stat"><b>-</b><span>타율</span></div>
+          <div class="stat"><b>-</b><span>홈런</span></div>
+          <div class="stat"><b>-</b><span>타점</span></div>
+          <div class="stat"><b>-</b><span>득점</span></div>
+          <div class="stat"><b>-</b><span>도루</span></div>
+        </div>
+      </div>
+
+      <!-- 두산 베어스 공식 홈페이지 선수 페이지 임베드 -->
+      <div class="box embed">
+        <iframe src="https://www.doosanbears.com/member/batters/64646"
+                title="두산 베어스 공식 홈페이지 박찬호 선수 페이지"
+                loading="lazy"></iframe>
+      </div>
+    </section>
+
+    <!-- ===== 2. 커리어 타임라인 ===== -->
+    <section class="sec" id="timeline">
+      <h2>커리어 타임라인 <small>TIMELINE</small></h2>
+      <ol class="timeline">
+        <li><div class="year">2014</div>KIA 타이거즈 입단 (2차 5라운드 50순위), 프로 데뷔</li>
+        <li><div class="year">2017–2018</div>육군 수도방위사령부 제1경비단 복무, 2018년 10월 병장 만기 전역</li>
+        <li><div class="year">2019</div>주전 유격수로 도약, 첫 도루왕</li>
+        <li><div class="year">2022</div>두 번째 도루왕</li>
+        <li><div class="year">2023</div>KBO 수비상 (유격수) 첫 수상</li>
+        <li><div class="year">2024</div>134경기 타율 .307 · 158안타 · 20도루. KIA 통합우승, 한국시리즈 5차전 데일리 MVP, 2년 연속 수비상, 생애 첫 골든글러브</li>
+        <li><div class="year">2025</div>KIA에서의 마지막 시즌 (134경기 타율 .287). 11월 18일 두산과 4년 최대 80억 원 FA 계약 — 그해 FA 1호 계약</li>
+        <li><div class="year">2026</div>등번호 7번을 달고 두산 베어스에서 첫 시즌. 시즌 중 팬 영상을 보고 등장곡을 '환호'로 바꿈. '허슬두'와 함께!</li>
+      </ol>
+    </section>
+
+    <!-- ===== 3. 수상 경력 ===== -->
+    <section class="sec" id="awards">
+      <h2>수상 경력 <small>AWARDS</small></h2>
+      <div class="grid">
+        <div class="box award"><div class="icon">🧤</div><strong>골든글러브 (유격수)</strong><span>2024</span></div>
+        <div class="box award"><div class="icon">🏃</div><strong>도루왕</strong><span>2019 · 2022</span></div>
+        <div class="box award"><div class="icon">🛡️</div><strong>KBO 수비상 (유격수)</strong><span>2023 · 2024</span></div>
+        <div class="box award"><div class="icon">🏆</div><strong>한국시리즈 우승</strong><span>2024 (KIA)</span></div>
+        <div class="box award"><div class="icon">⭐</div><strong>한국시리즈 데일리 MVP</strong><span>2024 5차전</span></div>
+      </div>
+    </section>
+
+    <!-- ===== 4. KBO 명장면 ===== -->
+    <section class="sec" id="highlights">
+      <h2>KBO 명장면 <small>HIGHLIGHTS</small></h2>
+      <div class="videos" id="highlight-list"></div>
+    </section>
+
+    <!-- ===== 5. 베팁 모음 (BEARS TV) ===== -->
+    <section class="sec" id="betip">
+      <h2>베팁 모음 <small>BEARS TV</small></h2>
+      <div class="videos" id="betip-list"></div>
+      <div class="links">
+        <a class="link-btn" href="https://www.youtube.com/channel/UCJTSEujmLRR_U0a-Tvm_OEg" target="_blank" rel="noopener">
+          <small>두산 베어스 공식 유튜브</small>
+          <strong>BEARS TV 채널 →</strong>
+        </a>
+        <a class="link-btn" href="https://www.youtube.com/channel/UCJTSEujmLRR_U0a-Tvm_OEg/search?query=%EB%B0%95%EC%B0%AC%ED%98%B8" target="_blank" rel="noopener">
+          <small>BEARS TV 안에서</small>
+          <strong>'박찬호' 영상 검색 →</strong>
+        </a>
+      </div>
+    </section>
+
+    <!-- ===== 6. 찬호에게 보내는 환호들 ===== -->
+    <section class="sec" id="cheers">
+      <h2>찬호에게 보내는 환호들 <small>CHEERS</small></h2>
+      <p class="stadium-caption" id="cheer-count"></p>
+
+      <!-- 잠실 관중석: 불 켜진 자리를 누르면 편지가 열려요 -->
+      <div class="stadium" id="stadium" style="--glow:0">
+        <div class="lights" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+        <div class="stands" id="stands"></div>
+        <div class="field" aria-hidden="true"><span>7</span></div>
+      </div>
+      <p class="note">불 켜진 자리를 눌러보세요. 편지 한 통이 관중석의 불빛 하나예요.</p>
+    </section>
+
+    <!-- 편지 열리는 창 -->
+    <dialog class="letter" id="letter">
+      <form method="dialog"><button class="letter-close" aria-label="닫기">×</button></form>
+      <span class="stamp" aria-hidden="true">7</span>
+      <p class="letter-date" id="letter-date"></p>
+      <h3 class="letter-title" id="letter-title"></h3>
+      <div class="letter-body" id="letter-body"></div>
+      <p class="letter-sign">— 찬호에게, chano_ss가</p>
+    </dialog>
   </main>
 
   <footer>
     © chano_ss · Design based on
     <a href="https://github.com/mmrahmanbappi/100-css-designs">100 CSS Designs</a> (MIT)
   </footer>
+
+  <script>
+    /* ===========================================================
+       ✏️ 영상 넣는 곳
+       url에 유튜브 주소를 붙여넣으면 자동으로 영상이 나와요.
+       (youtube.com/watch?v=..., youtu.be/..., shorts/... 모두 가능)
+       칸을 더 만들고 싶으면 { title: '', url: '' }, 를 한 줄 추가하세요.
+       =========================================================== */
+    const HIGHLIGHTS = [
+      { title: '명장면 1', url: '' },
+      { title: '명장면 2', url: '' },
+      { title: '명장면 3', url: '' },
+      { title: '명장면 4', url: '' },
+    ];
+
+    const BETIP = [
+      { title: '베팁 1', url: '' },
+      { title: '베팁 2', url: '' },
+      { title: '베팁 3', url: '' },
+      { title: '베팁 4', url: '' },
+    ];
+
+    function youtubeId(url) {
+      const m = (url || '').match(/(?:youtu\.be\/|v=|shorts\/|embed\/)([\w-]{11})/);
+      return m ? m[1] : null;
+    }
+
+    function renderVideos(list, targetId) {
+      const box = document.getElementById(targetId);
+      list.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'box video';
+        const frame = document.createElement('div');
+        frame.className = 'frame';
+        const id = youtubeId(item.url);
+        if (id) {
+          const iframe = document.createElement('iframe');
+          iframe.src = 'https://www.youtube.com/embed/' + id;
+          iframe.title = item.title;
+          iframe.allowFullscreen = true;
+          frame.appendChild(iframe);
+        } else {
+          frame.textContent = '🎬 영상 준비 중';
+        }
+        const p = document.createElement('p');
+        p.textContent = item.title;
+        card.append(frame, p);
+        box.appendChild(card);
+      });
+    }
+
+    renderVideos(HIGHLIGHTS, 'highlight-list');
+    renderVideos(BETIP, 'betip-list');
+
+    /* ===========================================================
+       ✏️ 찬호에게 보내는 편지 쓰는 곳
+       편지 하나 = 관중석 불빛 하나. 아래 형식대로 계속 추가하세요.
+       본문(text)은 ` ` (백틱) 안에 쓰면 줄바꿈이 그대로 나와요.
+       새 편지를 추가해도 이미 켜진 자리는 바뀌지 않아요.
+       =========================================================== */
+    const LETTERS = [
+      {
+        date: '2026. 10. 10.',
+        title: '첫 번째 편지',
+        text: `찬호에게,
+
+여기에 편지를 써주세요.`
+      },
+      {
+        date: '2026. 10. 10.',
+        title: '두 번째 편지',
+        text: `여기에 두 번째 편지를 써주세요.`
+      },
+    ];
+
+    /* 관중석 만들기: 아래(앞줄)는 넓고 위(뒷줄)는 좁게 */
+    const ROWS = 8, PER_ROW = 20;
+    const TOTAL = ROWS * PER_ROW;
+
+    // 자리 순서를 항상 똑같이 섞기 (편지를 추가해도 기존 불빛 위치 유지)
+    function seatOrder() {
+      let s = 7;
+      const rand = () => (s = (s * 16807) % 2147483647) / 2147483647;
+      const idx = [...Array(TOTAL).keys()];
+      for (let i = idx.length - 1; i > 0; i--) {
+        const j = Math.floor(rand() * (i + 1));
+        [idx[i], idx[j]] = [idx[j], idx[i]];
+      }
+      return idx;
+    }
+
+    function renderStadium() {
+      const stands = document.getElementById('stands');
+      const order = seatOrder();
+      const letterAt = {};
+      LETTERS.slice(0, TOTAL).forEach((l, i) => { letterAt[order[i]] = i; });
+
+      for (let r = 0; r < ROWS; r++) {
+        const row = document.createElement('div');
+        row.className = 'stand-row';
+        row.style.setProperty('--n', PER_ROW);
+        row.style.setProperty('--w', (64 + r * (36 / (ROWS - 1))) + '%');  // 뒷줄 64% → 앞줄 100%
+        for (let c = 0; c < PER_ROW; c++) {
+          const seatNo = r * PER_ROW + c;
+          const li = letterAt[seatNo];
+          let seat;
+          if (li !== undefined) {
+            seat = document.createElement('button');
+            seat.type = 'button';
+            seat.className = 'seat lit';
+            seat.style.setProperty('--d', (seatNo % 7) * .4 + 's');
+            seat.setAttribute('aria-label', '편지 열기: ' + LETTERS[li].title);
+            seat.addEventListener('click', () => openLetter(li));
+          } else {
+            seat = document.createElement('span');
+            seat.className = 'seat';
+            seat.setAttribute('aria-hidden', 'true');
+          }
+          row.appendChild(seat);
+        }
+        stands.appendChild(row);
+      }
+
+      const n = Math.min(LETTERS.length, TOTAL);
+      document.getElementById('stadium').style.setProperty('--glow', n / TOTAL);
+      document.getElementById('cheer-count').innerHTML =
+        '<b>' + n + '개</b>의 환호가 잠실을 밝히고 있어요';
+    }
+
+    const dialog = document.getElementById('letter');
+    function openLetter(i) {
+      const l = LETTERS[i];
+      document.getElementById('letter-date').textContent = l.date || '';
+      document.getElementById('letter-title').textContent = l.title || '';
+      document.getElementById('letter-body').textContent = l.text || '';
+      dialog.showModal();
+    }
+    // 바깥(어두운 부분) 누르면 닫기
+    dialog.addEventListener('click', e => {
+      const r = dialog.getBoundingClientRect();
+      const inside = e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+      if (!inside) dialog.close();
+    });
+
+    renderStadium();
+  </script>
 </body>
 </html>
